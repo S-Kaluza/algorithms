@@ -1,4 +1,5 @@
 from collections import deque
+import heapq
 
 class Node:
     def __init__(self, data):
@@ -81,6 +82,62 @@ class Graph:
                     print(matrix[i][j], end=" ")
             print("")
 
+class graphWithWeight:
+    def __init__(self, vertices):
+        self.V = vertices
+        self.graph = {}
+
+    def add_edge(self, src, dest, weight):
+        if src in self.graph:
+            self.graph[src].append((dest, weight))
+        else:
+            self.graph[src] = [(dest, weight)]
+
+    def print_graph(self):
+        for i in range(self.V):
+            print("Adjacency list of vertex {}\n head".format(i), end="")
+            temp = self.graph[i]
+            while temp:
+                print(" -> {}".format(temp.data), end="")
+                temp = temp.next
+            print("")
+
+    def print_matrix(self):
+        matrix = [[0 for x in range(self.V)] for y in range(self.V)]
+        for i in range(self.V):
+            temp = self.graph[i]
+            while temp:
+                matrix[i][temp.data] = 1
+                temp = temp.next
+        for i in range(self.V):
+            for j in range(self.V):
+                if(i != 0 and j != 0):
+                    print(matrix[i][j], end=" ")
+            print("")
+
+    def prim(self, start):
+        if start >= self.V:
+            raise ValueError("Invalid start vertex")
+        if not self.graph:
+            raise ValueError("Graph is empty")
+        key = [float("inf")] * self.V
+        parent = [None] * self.V
+        key[start] = 0
+        mst = []
+        heap = []
+        heapq.heappush(heap, (0, start))
+        while heap:
+            u = heapq.heappop(heap)[1]
+            if u in mst:
+                continue
+            mst.append(u)
+            for v, weight in self.graph.get(u, []):
+                if key[v] > weight:
+                    key[v] = weight
+                    parent[v] = u
+                    heapq.heappush(heap, (key[v], v))
+        return parent
+
 
 
 def main():
@@ -120,7 +177,7 @@ def main():
     graph.add_edge(2, 3, 4)
     graph.add_edge(3, 4, 2)
 
-    edges = prim(graph, 0)
+    edges = graph.prim(0)
     print(edges)
 
 main()

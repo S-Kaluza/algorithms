@@ -68,10 +68,9 @@ def main():
     graph.add_edge(3, 6, 2)
     graph.add_edge(6, 5, 9)
     graph.add_edge(4, 5, 6)
-    #floyd(graph.graph)
+
     print(graph.djikstra(1, 5))
     print(graph.Floyd(1, 5))
     print(graph.Ballman_Ford(1, 5))
-    #print(graph.shortestPath(1, 5))
 
 main()
